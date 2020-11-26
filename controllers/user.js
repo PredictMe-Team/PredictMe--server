@@ -52,6 +52,8 @@ class UserController {
     let country
     let age
     let gender
+    let url
+    
     axios({
       url: `https://api.nationalize.io/?name=${name}`,
       method: "GET",
@@ -85,10 +87,21 @@ class UserController {
       })
       .then(result => {
         gender = result.data.gender
+        return axios({
+          url: "https://api.thecatapi.com/v1/images/search",
+          method: "GET",
+          headers: {
+              "x-api-key": "a6e5d737-a3fb-45b6-bec7-123f2779c615"
+          }
+          })
+      })
+      .then(result => {
+        let url = result.data[0].url
         res.status(200).json({
           country,
           age,
-          gender
+          gender,
+          url
         })
       })
       .catch(err => {

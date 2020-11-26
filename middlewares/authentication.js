@@ -1,4 +1,3 @@
-const { nextTick } = require('process')
 const { verifyToken } = require('../helpers/jwt')
 const { User } = require('../models')
 
