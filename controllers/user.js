@@ -1,6 +1,7 @@
 const { User } = require('../models')
 const { comparing } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
+const {national, randCountry} = require('../helpers/nationalize')
 
 class UserController {
   static async register(req, res) {
@@ -46,7 +47,26 @@ class UserController {
   }
 
    static async predict(req, res) {
-     
+    
+    const {name} = req.body
+    axios({
+      url: `https://api.nationalize.io/?name=${name}`,
+      method: "GET",
+    })
+    .then(({ data }) =>{
+      
+      if(data.country.length < 1) {
+        res.status(200).json(randCountry())
+        
+      } else {
+        let countryid=data.country[0].country_id
+        let countryname = national(countryid)
+        res.status(200).json(countryname)
+      }
+    })
+    .catch(err =>{
+      res.status(500).json(err)
+    })
    }
 }
 
