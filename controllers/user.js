@@ -1,7 +1,8 @@
 const { User } = require('../models')
 const { comparing } = require('../helpers/bcrypt')
 const { createToken } = require('../helpers/jwt')
-const {national, randCountry} = require('../helpers/nationalize')
+const { national, randCountry } = require('../helpers/nationalize')
+const axios = require('axios')
 
 class UserController {
   static async register(req, res) {
@@ -34,8 +35,8 @@ class UserController {
         const value = {
           email: data.email
         }
-        const token = createToken(value)
-        res.status(201).json({ token })
+        const access_token = createToken(value)
+        res.status(201).json({ access_token })
       } else {
         res.status(404).json({
           msg: `Invalid email or password`
@@ -46,28 +47,54 @@ class UserController {
     }
   }
 
-   static async predict(req, res) {
-    
-    const {name} = req.body
+  static async predict(req, res) {
+    const { name } = req.body
+    let country
+    let age
+    let gender
     axios({
       url: `https://api.nationalize.io/?name=${name}`,
       method: "GET",
     })
-    .then(({ data }) =>{
-      
-      if(data.country.length < 1) {
-        res.status(200).json(randCountry())
-        
-      } else {
-        let countryid=data.country[0].country_id
-        let countryname = national(countryid)
-        res.status(200).json(countryname)
-      }
-    })
-    .catch(err =>{
-      res.status(500).json(err)
-    })
-   }
+      .then(result => {
+        if (result.data.country.length < 1) {
+          // res.status(200).json(randCountry())
+          country = randCountry()
+          return axios({
+            url: `https://api.agify.io?name=${name}`,
+            method: "GET",
+          })
+        } else {
+          let countryid = result.data.country[0].country_id
+          let countryname = national(countryid)
+          // res.status(200).json(countryname)
+          country = countryname
+          return axios({
+            url: `https://api.agify.io?name=${name}`,
+            method: "GET",
+          })
+        }
+      })
+      .then(result => {
+        // console.log(result);
+        age = result.data.age
+        return axios({
+          url: `https://api.genderize.io?name=${name}`,
+          method: "GET",
+        })
+      })
+      .then(result => {
+        gender = result.data.gender
+        res.status(200).json({
+          country,
+          age,
+          gender
+        })
+      })
+      .catch(err => {
+        res.status(500).json(err)
+      })
+  }
 }
 
 module.exports = UserController
