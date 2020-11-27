@@ -95,12 +95,12 @@ headers:{access_token}
   }
   ```
 
-## 3. Get Nationality
+## 3. Predict API
 * URL
   /Predict
 
 * Method
- `GET`
+ `POST`
 
 * URL Params
   None
@@ -116,132 +116,28 @@ headers:{access_token}
 ```
 
 * Success Response
-  Code: `201 Created`
+  Code: `200 OK`
   Content: 
   ```
   {
-    "country": "countryname"
-  }
-  ```
-
-* Error Response
-  code: `500 Internal Server Error`
-  content:
-  ```
-  {
-    "country": "random country"
-  }
-  ```
-
-## 4. Get Age
-* URL
-  /Predict
-
-* Method
- `GET`
-
-* URL Params
-  None
-
-* Data Params
-
-```{
-  "name": "name"
-},
-{
-headers:{access_token}
-}
-```
-
-* Success Response
-  Code: `201 Created`
-  Content: 
-  ```
-  {
-    "age": "result.data.age"
-  }
-  ```
-
-* Error Response
-  code: `500 Internal Server Error`
-  content:
-  ```
-  {
-    "age": "random age"
-  }
-  ```
-
-## 5. Get Gender
-* URL
-  /Predict
-
-* Method
- `GET`
-
-* URL Params
-  None
-
-* Data Params
-
-```{
-  "name": "name"
-},
-{
-headers:{access_token}
-}
-```
-
-* Success Response
-  Code: `201 Created`
-  Content: 
-  ```
-  {
-    "gender": "result.data.gender"
-  }
-  ```
-
-* Error Response
-  code: `500 Internal Server Error`
-  content:
-  ```
-  {
-    "gender": "random gender"
-  }
-  ```
-## 6. Get cat pictures
-* URL
-  /Predict
-
-* Method
- `GET`
-
-* URL Params
-  None
-
-* Data Params
-
-  none
-
-
-* Success Response
-  Code: `201 Created`
-  Content: 
-  ```
-  {
-     "url": "img_url"
-  }
-  ```
-
-* Error Response
-  code: `500 Internal Server Error`
-  content:
-  ```
-  {
+    "country": "countryname",
+    "age": "result.data.age",
+    "gender": "result.data.gender",
     "url": "img_url"
   }
   ```
 
-  ## 6. Oath
+* Error Response
+  code: `500 Internal Server Error`
+  content:
+  ```
+  {
+    err
+  }
+  ```
+
+
+## 4. Oath
 * URL
   /googleLogin
 
@@ -259,7 +155,7 @@ headers:{access_token}
 ```
 
 * Success Response
-  Code: `201 Created`
+  Code: `200 OK`
   Content: 
   ```
   {
