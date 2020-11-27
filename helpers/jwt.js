@@ -1,12 +1,12 @@
 const jwt = require('jsonwebtoken')
 
 function createToken(value) {
-  const token = jwt.sign(value, 'predict')
+  const token = jwt.sign(value, process.env.SCRT)
   return token
 }
 
 function verifyToken(value) {
-  const decoded = jwt.verify(value, 'predict')
+  const decoded = jwt.verify(value, process.env.SCRT)
   return decoded
 }
 
